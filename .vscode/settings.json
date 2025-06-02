@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "limits": "cpp",
+        "algorithm": "cpp",
+        "queue": "cpp",
+        "unordered_set": "cpp",
+        "array": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "vector": "cpp",
+        "iostream": "cpp"
+    }
+}
