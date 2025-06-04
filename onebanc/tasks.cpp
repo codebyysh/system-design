@@ -2,24 +2,32 @@
 using namespace std ; 
 
 
-class taks_1 { //  Implement the Levenshtein Algorithm
+
+class taks_1 { 
 
 
-    int f ( int i , int j , string s1 , string s2 ){
+    int f ( int i , int j , string & s1 , string &s2 , vector<vector<int>> &dp ){
         if ( i < 0 ) return j+ 1 ; 
         if ( j < 0 ) return i + 1 ; 
 
-        if ( s1[i] == s2[j] ) return 0 + f(i-1 , j - 1 , s1 , s2 ) ; 
+        if ( dp[i][j] != -1 ) return dp[i][j] ; 
 
-        return min ( 1 + f( i , j - 1 ,s1 , s2) , min ( 1 + f ( i - 1 , j,s1 , s2 ) , 1 + f( i - 1 , j -1,s1 , s2 ))) ;
+        if ( s1[i] == s2[j] ) return dp[i][j] = 0 + f(i-1 , j - 1 , s1 , s2 , dp ) ; 
+
+        int insert = 1 + f( i , j - 1 ,s1 , s2 , dp) ; 
+        int del = 1 + f ( i - 1 , j,s1 , s2 , dp) ; 
+        int replace = 1 + f( i - 1 , j -1,s1 , s2 , dp ) ; 
+
+        return dp[i][j] = min ( insert , min( del , replace )) ;
     }
+
 
     public :
     int EditDistance (string s1, string s2) {
         int n = s1.size() ; 
         int m = s2.size() ; 
-
-        return f( n -1 , m -1 , s1 , s2 ) ; 
+        vector<vector<int>> dp ( n , vector<int> ( m , -1 )) ; 
+        return f( n -1 , m -1 , s1 , s2 , dp ) ; 
     }
 
 
@@ -31,15 +39,20 @@ class taks_1 { //  Implement the Levenshtein Algorithm
 class task_2 {
 
     private :
-    int f ( int i , int j , string s1 , string s2 , int Ci , int Cd , int Cs ){
+    int f ( int i , int j , string & s1 , string & s2 , int Ci , int Cd , int Cs , vector<vector<int>>& dp ){
         if ( i < 0 ) return (j+1) * Ci ; 
         if ( j < 0 ) return (i+1) * Cd ; 
 
-        if ( s1[i] == s2[j] ) return 0 + f(i-1 , j - 1 , s1 , s2 , Ci , Cd , Cs ) ; 
+        if ( dp[i][j] != -1 ) return dp[i][j] ; 
 
-        return min ( Ci + f( i , j - 1 ,s1 , s2, Ci , Cd , Cs) , 
-                    min ( Cd + f ( i - 1 , j,s1 , s2 , Ci , Cd , Cs) , 
-                            Cs + f( i - 1 , j -1,s1 , s2, Ci , Cd , Cs ))) ;
+        if ( s1[i] == s2[j] ) return 0 + f(i-1 , j - 1 , s1 , s2 , Ci , Cd , Cs ,dp  ) ; 
+
+        
+        int insert = Ci + f( i , j - 1 ,s1 , s2 , Ci , Cd , Cs ,dp) ; 
+        int del = Cd + f ( i - 1 , j,s1 , s2 , Ci , Cd , Cs ,dp) ; 
+        int replace = Cs + f( i - 1 , j -1,s1 , s2 , Ci , Cd , Cs ,dp ) ; 
+
+        return dp[i][j] = min ( insert , min( del , replace )) ;
     }
 
     public:
@@ -48,7 +61,9 @@ class task_2 {
         int n = s1.size() ; 
         int m = s2.size() ; 
 
-        return f( n -1 , m -1 , s1 , s2 , Ci , Cd , Cs ) ; 
+        vector<vector<int>> dp ( n , vector<int>(m , -1 )) ; 
+
+        return f( n -1 , m -1 , s1 , s2 , Ci , Cd , Cs , dp ) ; 
     }
 
 };
@@ -56,44 +71,68 @@ class task_2 {
 
 
 
+
+
+
+
+
+
+
+
 class task_3 {
+
     private :
-    int f ( int i , int j , string s1 , string s2 , int Ci , int Cd , int Cs ){
+    int f ( int i , int j , string & s1 , string & s2 , int Ci , int Cd , int Cs , vector<vector<int>>& dp ){
         if ( i < 0 ) return (j+1) * Ci ; 
         if ( j < 0 ) return (i+1) * Cd ; 
 
-        if ( s1[i] == s2[j] ) return 0 + f(i-1 , j - 1 , s1 , s2 , Ci , Cd , Cs ) ; 
+        if ( dp[i][j] != -1 ) return dp[i][j] ; 
 
-        return min ( Ci + f( i , j - 1 ,s1 , s2, Ci , Cd , Cs) , 
-                    min ( Cd + f ( i - 1 , j,s1 , s2 , Ci , Cd , Cs) , 
-                            Cs + f( i - 1 , j -1,s1 , s2, Ci , Cd , Cs ))) ;
+        if ( s1[i] == s2[j] ) return 0 + f(i-1 , j - 1 , s1 , s2 , Ci , Cd , Cs ,dp  ) ; 
+
+        
+        int insert = Ci + f( i , j - 1 ,s1 , s2 , Ci , Cd , Cs ,dp) ; 
+        int del = Cd + f ( i - 1 , j,s1 , s2 , Ci , Cd , Cs ,dp) ; 
+        int replace = Cs + f( i - 1 , j -1,s1 , s2 , Ci , Cd , Cs ,dp ) ; 
+
+        return dp[i][j] = min ( insert , min( del , replace )) ;
     }
 
-    public:
+
+
 
     int EditDistance(string s1, string s2, int Ci, int Cd, int Cs) {
         int n = s1.size() ; 
         int m = s2.size() ; 
 
-        return f( n -1 , m -1 , s1 , s2 , Ci , Cd , Cs ) ; 
-    }
+        vector<vector<int>> dp ( n , vector<int>(m , -1 )) ; 
 
-    // to return the output as a collection of strings 
+        return f( n -1 , m -1 , s1 , s2 , Ci , Cd , Cs , dp ) ; 
+    }
+    
+
+    public : 
+    
     vector<string> output ( vector<string> dictionary , string input , int Ci , int Cd , int Cs ){
+
         vector<string> ans ; 
         
         int min_cost = INT_MAX ; 
-        for ( auto word_in_dict : dictionary ){
+
+        for ( string word_in_dict : dictionary ){
             int d = EditDistance(input , word_in_dict , Ci , Cd , Cs ) ; 
             if ( d < min_cost ) {
                 min_cost = d ; 
                 ans.clear() ; 
                 ans.push_back(word_in_dict) ; 
+
+
             }
             else if ( d == min_cost ) ans.push_back(word_in_dict) ; 
         }
 
         return ans ; 
+
     }
 
 };
@@ -133,15 +172,14 @@ int main()
 
     task_3 obj ; 
     
-    vector<string> dict = {"cred", "bet", "shat", "that", "brad", "cart", "brat", "card"};
-    string word = "dat";
-    int ci = 1, cd = 1, cs = 1;
+    vector<string> dict = { "cred" ,  "bet" , "shat",  "that",  "brad" , "cart", "brat" , "card"}  ;
+    string input = "dat" ;
+    
 
-    vector<string> res = obj.output(dict, word, ci, cd, cs);
+    vector<string> result = obj.output( dict, input ,1 , 1 ,1 );
 
-    cout << "Words close to \"" << word << "\": ";
-    for (int i = 0; i < res.size(); i++) {
-        cout << res[i] << " ";
+    for ( auto i : result ){
+        cout << i << " " ; 
     }
     cout << endl;
 
