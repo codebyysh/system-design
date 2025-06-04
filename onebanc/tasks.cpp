@@ -5,7 +5,7 @@ using namespace std ;
 
 class taks_1 { 
 
-
+    private :
     int f ( int i , int j , string & s1 , string &s2 , vector<vector<int>> &dp ){
         if ( i < 0 ) return j+ 1 ; 
         if ( j < 0 ) return i + 1 ; 
@@ -112,7 +112,7 @@ class task_3 {
     
 
     public : 
-    
+
     vector<string> output ( vector<string> dictionary , string input , int Ci , int Cd , int Cs ){
 
         vector<string> ans ; 
@@ -139,15 +139,103 @@ class task_3 {
 
 
 
+
+class task_4_tabulation {
+
+    public : 
+
+    int EditDistance ( string s1 , string s2 ){
+        int n = s1.size() ; 
+        int m = s2.size() ; 
+
+        vector<vector<int>> dp ( n + 1 , vector<int> ( m+ 1 , 0 ) ) ; 
+
+        for ( int i = 0 ; i <= n ; i ++ ) dp[i][0] = i ; 
+        for ( int j = 0 ; j <= m ; j ++ ) dp[0][j] = j ; 
+
+        for ( int i = 1 ; i <= n ; i ++ ){
+            for ( int j = 1 ; j <= m ; j ++ ){
+
+
+                if ( s1[i-1] == s2[j-1] ) dp[i][j] = 0 + dp[i-1][j-1] ; 
+
+
+                else {
+                    int insert = 1 + dp[i][j-1] ; 
+                    int del = 1 + dp[i-1][j] ; 
+                    int replace  =  1 + dp[i-1][j-1] ; 
+
+                    dp[i][j] = min( insert , min(del , replace )) ; 
+                }
+            }
+        }
+
+        return dp[n][m] ; 
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+class space_optimisation {
+
+    public : 
+    int EditDistance ( string s1 , string s2 ){
+        int n = s1.size() ; 
+        int m = s2.size() ; 
+
+        vector<int> prev ( m + 1 , 0 ) ; 
+        vector<int> curr ( m + 1 , 0 ) ; 
+
+        for ( int j = 0 ; j <= m ; j ++ ) prev[j] = j ; 
+
+        for ( int i = 1 ; i <= n ; i ++ ){
+            curr[0] = i ; 
+
+            for ( int j = 1 ; j <= m ; j ++ ){
+
+                if ( s1[i-1] == s2[j-1] ) curr[j] = prev[j-1] ; 
+
+                else
+                {
+                    int insert = 1 + prev[j] ; 
+                    int del = 1 + curr[j-1] ; 
+                    int replace = 1 + prev[j-1] ; 
+
+                    curr[j] = min( insert , min ( del , replace )) ;
+                } 
+            }
+            prev = curr ; 
+        }
+
+        return prev[m] ; 
+        
+    }
+
+
+};
+
+
+
+
+
+
 int main()
 {
-    // string s1 ; 
-    // string s2 ; 
+    string s1 ; 
+    string s2 ; 
 
-    // cout << " enter the string 1 " << endl ;
-    // cin >> s1 ; 
-    // cout << " enter the stirng 2 " << endl ;
-    // cin >> s2 ; 
+    cout << " enter the string 1 " << endl ;
+    cin >> s1 ; 
+    cout << " enter the stirng 2 " << endl ;
+    cin >> s2 ; 
 
     // int Ci ; 
     // cout << " enter the value of Ci (the cost for insertion ) " << endl ; 
@@ -170,17 +258,21 @@ int main()
     // cout << obj.EditDistance(s1 , s2) << endl ; 
 
 
-    task_3 obj ; 
+    // task_3 obj ; 
     
-    vector<string> dict = { "cred" ,  "bet" , "shat",  "that",  "brad" , "cart", "brat" , "card"}  ;
-    string input = "dat" ;
+    // vector<string> dict = { "cred" ,  "bet" , "shat",  "that",  "brad" , "cart", "brat" , "card"}  ;
+    // string input = "dat" ;
     
 
-    vector<string> result = obj.output( dict, input ,1 , 1 ,1 );
+    // vector<string> result = obj.output( dict, input ,1 , 1 ,1 );
 
-    for ( auto i : result ){
-        cout << i << " " ; 
-    }
-    cout << endl;
+    // for ( auto i : result ){
+    //     cout << i << " " ; 
+    // }
+    // cout << endl;
+
+    space_optimisation obj ; 
+    int result  = obj.EditDistance(s1 ,s2)  ; 
+    cout << result << endl ;
 
 }
