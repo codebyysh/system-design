@@ -21,6 +21,8 @@ void printLength(Box b) {
 
 int main (){
     cout << " this is the friend function class " << endl ; 
-    Box* b = new Box() ; 
-    printLength(*b) ; 
+    // statically implementation of object in friend function
+    
+    Box b ; 
+    printLength(b) ; 
 }
