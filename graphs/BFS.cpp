@@ -1,27 +1,36 @@
 #include<iostream>
-using namespace std ; 
+using namespace std ;
 
-void bfs ( int V , vector<int> adj[] ) {
-    vector<bool> visited(V , false ) ; 
+vector<int> BFS (int start , int n , vector<vector<int>> &adj ) {
+    vector<int> visited(n , false ) ; 
     queue<int> q ; 
+    vector<int> result ; 
 
-    for ( int i = 0 ; i < V ; i ++ ){
-        if ( !visited[i] ) {
-            q.push(i) ; 
-            visited[i] = true ; 
+    q.push(start) ; 
+    visited[start] = true ; 
 
-            while ( !q.empty()) {
-                int node = q.front() ; 
-                q.pop() ; 
-                cout << node << " " ; 
+    while( !q.empty() ){
+        int node = q.front() ; 
+        q.pop() ; 
+        result.push_back(node) ; 
 
-                for ( int neighbor : adj[node] ) {
-                    if ( !visited[neighbor] ) {
-                        q.push(neighbor) ; 
-                        visited[neighbor] = true ; 
-                    }
-                }
+        for ( auto x : adj[node]) {
+            if ( !visited[x] ) {
+                visited[x] = true ; 
+                q.push(x) ; 
             }
         }
     }
+    return result ; 
 }
+
+int main()
+{
+    vector<vector<int>> adj = {{1,2}, {0,2,3}, {0,4}, {1,4}, {2,3}};
+    vector<int> result = BFS(0 , adj.size() , adj ) ; 
+
+    for ( auto x : result ){
+        cout << x << " " ; 
+    }
+
+}   
