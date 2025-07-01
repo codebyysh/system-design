@@ -1,6 +1,40 @@
 #include<iostream>
 using namespace std ;
 
+
+class BFS_DFS {
+    void BFS ( int start , vector<vector<int>> & adj ) {
+        vector<int> result ; 
+        queue<int> q ; 
+        vector<bool> visited ( adj.size() , false ) ; 
+
+        q.push(start) ; 
+
+        while ( !q.empty() ) {
+            int node = q.front() ; 
+            q.pop() ; 
+            result.push_back(node) ; 
+
+            for ( auto neighbor : adj[node] ) {
+                if ( !visited[neighbor] ) {
+                    visited[neighbor] = true ; 
+                    q.push(neighbor) ; 
+                }
+            }
+        }
+    }
+
+    void DFS ( int start , vector<vector<int>> & adj , vector<bool> & visited ){
+        cout << start << " " ; 
+        visited[start] = true ; 
+        for ( auto neighbor : adj[start] ){
+            if ( !visited[neighbor] ) DFS( neighbor , adj , visited ) ; 
+        }
+    }
+};
+
+
+
 vector<int> BFS (int start , int n , vector<vector<int>> &adj ) {
     vector<int> visited(n , false ) ; 
     queue<int> q ; 
