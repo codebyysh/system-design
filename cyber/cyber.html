@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Diffie–Hellman Key Exchange Mechanism</h1>
+<p>End user is Alice, JavaScript is Bob</p>
+
+<script>
+// Function to calculate (m^n) mod o
+function power(m, n, o) {
+    return Math.pow(m, n) % o;
+}
+
+// Step 1: Publicly agree on P and G
+var P = 23; // prime number
+var G = 9;  // primitive root
+
+document.write("The value of first prime number P := " + P + "<br>");
+document.write("The value of second prime number G := " + G + "<br><br>");
+
+// Step 2: Alice and Bob select private keys
+var Alice_private = 4;
+var Bob_private = 3;
+
+document.write("Alice's private key a := " + Alice_private + "<br>");
+document.write("Bob's private key b := " + Bob_private + "<br><br>");
+
+// Step 3: Calculate public keys
+var Alice_x = power(G, Alice_private, P); // A = g^a mod P
+var Bob_y   = power(G, Bob_private, P);   // B = g^b mod P
+
+document.write("Alice's public key (A) := " + Alice_x + "<br>");
+document.write("Bob's public key (B) := " + Bob_y + "<br><br>");
+
+// Step 4: Exchange public keys and calculate secret keys
+var Ka = power(Bob_y, Alice_private, P); // Shared secret for Alice
+var Kb = power(Alice_x, Bob_private, P); // Shared secret for Bob
+
+document.write("The value of Alice's secret key Ka := " + Ka + "<br>");
+document.write("The value of Bob's secret key Kb := " + Kb + "<br>");
+</script>
+
+</body>
+</html>
